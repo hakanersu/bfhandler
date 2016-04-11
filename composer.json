@@ -1,6 +1,8 @@
 {
     "name": "xuma/bfhandler",
-    "description": "Bulutfon BFXM builder.",
+    "description": "Bulutfon BFXM step builder.",
+    "keywords": ["bulutfon", "bulutfonxm", "bfxm"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Hakan ERSU",
@@ -9,6 +11,7 @@
     ],
     "minimum-stability": "alpha",
     "require": {
+        "php": ">=5.5.0",
         "phpFastCache/phpFastCache": "^4.3",
         "xuma/bfxm": "dev-master"
     },
