@@ -66,7 +66,7 @@ class Handler{
      */
     public function execute($func)
     {
-        $value = $func($this->get('response'));
+        $value = $func($this->get("{$this->uuid}-response"));
         $this->response = $value;
         return $this;
     }
