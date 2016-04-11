@@ -19,24 +19,23 @@ class Handler{
 
     public function __construct(Builder $builder,$config)
     {
-        $this->builder = $builder;
-
-        $this->config = $config;
-
-        $config = ["storage"=>$config['storage'],"path"=>$config['path']];
-
-        CacheManager::setup($config);
+        CacheManager::setup(["storage"=>$config['storage'],"path"=>$config['path']]);
 
         CacheManager::CachingMethod("phpfastcache");
-
-        $this->cache = CacheManager::getInstance();
 
         if(array_diff(['uuid', 'caller', 'callee','step'],array_keys($_POST))) {
             throw new Exception("Please check values");
         }
-        $this->step = $_POST['step'];
+
+        $this->cache = CacheManager::getInstance();
+
+        $this->config = $config;
+
+        $this->builder = $builder;
 
         $this->uuid = $_POST['uuid'];
+
+        $this->step = $_POST['step'];
 
         if(isset($_POST['returnvar'])) {
            $this->cache->set("{$this->uuid}-response",$_POST['returnvar'],60);
@@ -74,7 +73,7 @@ class Handler{
 
     /**
      * Gather user input.
-     * 
+     *
      * @param $ask
      * @param bool $error
      * @param int $min
@@ -85,12 +84,12 @@ class Handler{
     public function gather($ask,$error = false,$min=3,$max=10,$attempt=3)
     {
         $this->builder->gather([
-            'min_digits'=>$min,
-            'max_digits'=>$max,
-            'max_attempts'=>$attempt,
-            'ask'=>$ask,
-            'play_on_error'=> $error ? $error : $this->config['soundFiles']['error'],
-            'variable_name'=>'returnvar'
+            'min_digits'    => $min,
+            'max_digits'    => $max,
+            'max_attempts'  => $attempt,
+            'ask'           => $this->getSoundFile($ask),
+            'play_on_error' => $error ? $error : $this->config['soundFiles']['error'],
+            'variable_name' => 'returnvar'
         ])->build(true);
         return $this;
     }
@@ -118,6 +117,11 @@ class Handler{
         return $this->cache->get("{$this->uuid}-{$name}");
     }
 
+    /**
+     * Remove item from cache
+     *
+     * @param $name
+     */
     public function remove($name)
     {
         $this->cache->delete($name);
@@ -154,10 +158,15 @@ class Handler{
      */
     public function play($name)
     {
-        if(in_array($name,$this->config['soundFiles'])) {
-            $name = $this->config['soundFiles'][$name];
-        }
-        $this->builder->play($name)->build(true);
+        $this->builder->play($this->getSoundFile($name))->build(true);
         return $this;
+    }
+
+    protected function getSoundFile($name)
+    {
+        if(array_key_exists($name,$this->config['soundFiles'])) {
+            return $this->config['soundFiles'][$name];
+        }
+        return $name;
     }
 }
