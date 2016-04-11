@@ -1,0 +1,20 @@
+{
+    "name": "xuma/bfhandler",
+    "description": "Bulutfon BFXM builder.",
+    "authors": [
+        {
+            "name": "Hakan ERSU",
+            "email": "hakanersu@gmail.com"
+        }
+    ],
+    "minimum-stability": "alpha",
+    "require": {
+        "phpFastCache/phpFastCache": "^4.3",
+        "xuma/bfxm": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Xuma\\Bfhandler": "src/"
+        }
+    }
+}
