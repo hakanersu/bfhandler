@@ -72,14 +72,24 @@ class Handler{
         return $this;
     }
 
-    public function gather($type,$voice,$answer=8)
+    /**
+     * Gather user input.
+     * 
+     * @param $ask
+     * @param bool $error
+     * @param int $min
+     * @param int $max
+     * @param int $attempt
+     * @return $this
+     */
+    public function gather($ask,$error = false,$min=3,$max=10,$attempt=3)
     {
         $this->builder->gather([
-            'min_digits'=>3,
-            'max_digits'=>7,
-            'max_attempts'=>2,
-            'ask'=>'http://stage.ni.net.tr/bf/enter_customer_number.mp3',
-            'play_on_error'=>'http://bfxmdemo.bulutfon.com/demosesler/hatali-giris.mp3',
+            'min_digits'=>$min,
+            'max_digits'=>$max,
+            'max_attempts'=>$attempt,
+            'ask'=>$ask,
+            'play_on_error'=> $error ? $error : $this->config['soundFiles']['error'],
             'variable_name'=>'returnvar'
         ])->build(true);
         return $this;
