@@ -3,8 +3,12 @@ include '../vendor/autoload.php';
 use Xuma\Bfxm\Builder;
 use Xuma\Bfhandler\Handler;
 
+$config = [
+    'storage'=>'files',
+    'path'=> '/home/xuma/Desktop/bfbuilder/storage'
+];
 $bfxm = new Builder;
-$handler = new Handler($bfxm);
+$handler = new Handler($bfxm,$config);
 
 $handler->step(1)->gather('ask','Ask customer number?');
 

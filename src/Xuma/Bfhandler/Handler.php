@@ -15,18 +15,12 @@ class Handler{
 
     protected $step = false;
 
-    public function __construct(Builder $builder)
+    public function __construct(Builder $builder,$config)
     {
         $this->builder = $builder;
-
-        $config = array(
-            "storage"   => "files",
-            "path"      =>  "/home/xuma/Desktop/bfbuilder/storage",
-        );
-
+        $config = ["storage"=>$config['storage'],"path"=>$config['path']];
         CacheManager::setup($config);
         CacheManager::CachingMethod("phpfastcache");
-
         $this->cache = CacheManager::getInstance();
 
         if(array_diff(['uuid', 'caller', 'callee','step'],array_keys($_POST))) {
