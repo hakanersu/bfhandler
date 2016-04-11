@@ -5,7 +5,10 @@ use Xuma\Bfhandler\Handler;
 
 $config = [
     'storage'=>'files',
-    'path'=> '/home/xuma/Desktop/bfbuilder/storage'
+    'path'=> '/home/xuma/Desktop/bfbuilder/storage',
+    'soundFiles'=> [
+        'welcome'=>'http://bfxmdemo.bulutfon.com/demosesler/demo-hosgeldiniz.mp3'
+    ]
 ];
 $bfxm = new Builder;
 $handler = new Handler($bfxm,$config);

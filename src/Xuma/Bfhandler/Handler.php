@@ -9,6 +9,8 @@ class Handler{
 
     protected $cache;
 
+    protected $config;
+
     protected $builder;
 
     protected $response;
@@ -18,9 +20,15 @@ class Handler{
     public function __construct(Builder $builder,$config)
     {
         $this->builder = $builder;
+
+        $this->config = $config;
+
         $config = ["storage"=>$config['storage'],"path"=>$config['path']];
+
         CacheManager::setup($config);
+
         CacheManager::CachingMethod("phpfastcache");
+
         $this->cache = CacheManager::getInstance();
 
         if(array_diff(['uuid', 'caller', 'callee','step'],array_keys($_POST))) {
@@ -35,6 +43,13 @@ class Handler{
         }
     }
 
+    /**
+     * If step is equal to current step return object
+     * else return new Mock object.
+     *
+     * @param $value
+     * @return $this|Mock
+     */
     public function step($value)
     {
         if($value != $this->step) {
@@ -44,6 +59,12 @@ class Handler{
         return $this;
     }
 
+    /**
+     * Execute given function.
+     *
+     * @param $func
+     * @return $this
+     */
     public function execute($func)
     {
         $value = $func($this->get('response'));
@@ -64,13 +85,24 @@ class Handler{
         return $this;
     }
 
+    /**
+     * Persist given value with cache file.
+     *
+     * @param $name
+     * @return $this
+     */
     public function persist($name)
     {
-        var_dump($this->response);
         $this->cache->set("{$this->uuid}-{$name}",$this->response,60);
         return $this;
     }
 
+    /**
+     * Get value from cache file.
+     *
+     * @param $name
+     * @return mixed
+     */
     public function get($name)
     {
         return $this->cache->get("{$this->uuid}-{$name}");
@@ -81,11 +113,20 @@ class Handler{
         $this->cache->delete($name);
     }
 
+    /**
+     * Clear all cache.
+     */
     public function clean()
     {
         $this->cache->clean();
     }
 
+    /**
+     * Play if executed function fails.
+     *
+     * @param $name
+     * @return $this|Mock
+     */
     public function playIfFails($name)
     {
         if($this->response) {
@@ -95,9 +136,18 @@ class Handler{
         return new Mock();
     }
 
+    /**
+     * Play given sound file
+     *
+     * @param $name
+     * @return $this
+     */
     public function play($name)
     {
-        // play
+        if(in_array($name,$this->config['soundFiles'])) {
+            $name = $this->config['soundFiles'][$name];
+        }
+        $this->builder->play($name)->build(true);
         return $this;
     }
 }
