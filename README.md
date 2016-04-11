@@ -16,19 +16,29 @@ $config = [
         'customer-number'=>'http://bfxmdemo.bulutfon.com/demosesler/numara-tuslayiniz.mp3'
     ]
 ];
-$bfxm = new Builder;
-$handler = new Handler($bfxm,$config);
 
+// Bulutfon handler'i , bulutfon builder ile baslatalim.
+$handler = new Handler(new Builder,$config);
+
+// Birinci asamada kullanicidan musteri numarasi isteyelim.
 $handler->step(1)->gather('customer-number');
 
+// Gelen degeri execute ile istedigimiz sekilde isleyebiliriz.
+// Sonrasinda ise persist methodu ile fonksitondan donen degeri sonraki istek icin
+// cache dosyasinda saklayabiliriz.
 $handler->step(2)->execute(function($response) {
     return ($response*2);
 })
     ->playIfFails('error')
     ->persist('customerNumber')
     ->gather('ask','Ask password?');
+
+// Yukarida kaydemis oldugumuz customer numarasini
+// $handler use ile kullanarak fonksiyonumuzda kullanabiliriz.
 $handler->step(3)->execute(function($response) use($handler){
     return $handler->get('customerNumber')*3;
 })->persist('passwordResult');
 ```
+
+
 
