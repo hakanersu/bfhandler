@@ -143,11 +143,11 @@ class Handler{
      */
     public function playIfFails($name)
     {
-        if($this->response) {
+        if(!$this->response) {
             $this->play($name);
             return $this;
         }
-        return new Mock();
+        return $this;
     }
 
     /**
