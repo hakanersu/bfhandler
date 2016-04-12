@@ -19,7 +19,8 @@ $config = [
         'welcome'               => 'http://bfxmdemo.bulutfon.com/demosesler/demo-hosgeldiniz.mp3',
         'error'                 => 'http://bfxmdemo.bulutfon.com/demosesler/hatali-giris.mp3',
         'kullanici-id'          => 'http://benimadresim.com/sesler/kullanici-id-sor.mp3',
-        'kullanici-sifre'       => 'http://benimadresim.com/sesler/kullanici-sifre-sor.mp3'
+        'kullanici-sifre'       => 'http://benimadresim.com/sesler/kullanici-sifre-sor.mp3',
+        'tesekkurler'           => 'http://bfxmdemo.bulutfon.com/demosesler/tesekkurler.mp3'
     ]
 ];
 
