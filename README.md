@@ -153,6 +153,22 @@ $handler->step(3)->execute(function($response) use($handler,$customer){
 })->playIfFails('error')->play('tesekkurler');
 ```
 
+### Karmasik Menu Ornegi
+```php
+$handler = new Handler(new Builder,$config);
+
+$handler->step(1)->gather('hosgeldiniz');
+// Step 2
+$handler->step(2)->ifInput(1)->gather('musteri-numaranizi-giriniz');
+$handler->step(2)->ifInput(2)->gather('musteri-degilseniz');
+$handler->step(2)->ifInput(3)->play('hukiki-islemler');
+$handler->step(2)->ifInput(9)->play('ingilizece-menu');
+// Step 3
+$handler->step(3)->ifStep(1)->equal(1)->execute(function($response){ })->persist()->gather('asdfasdf');
+$handler->step(3)->ifStep(1)->equal(2)->dial(2);
+$handler->step(3)->ifStep(1)->equal(3)->dial(3);
+$handler->step(3)->ifStep(1)->equal(9)->dial(10);
+```
 
 ## TODO
 

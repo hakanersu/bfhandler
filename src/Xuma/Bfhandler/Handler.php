@@ -15,6 +15,8 @@ class Handler{
 
     protected $response;
 
+    protected $oldStep = false;
+
     protected $step = false;
 
     public function __construct(Builder $builder,$config)
@@ -38,10 +40,44 @@ class Handler{
         $this->step = $_POST['step'];
 
         if(isset($_POST['returnvar'])) {
-           $this->cache->set("{$this->uuid}-response",$_POST['returnvar'],60);
+            $previous = ($this->step - 1);
+            $this->cache->set("{$this->uuid}-step-{$previous}",$_POST['returnvar']);
+            $this->cache->set("{$this->uuid}-response",$_POST['returnvar'],60);
         }
     }
 
+    /**
+     * If input equal to given value.
+     * @param $input
+     * @return $this|Mock
+     */
+    public function ifInput($input)
+    {
+        if($input==$this->get("response")) {
+            return $this;
+        }
+        return new Mock;
+    }
+
+    /**
+     * If step value eqaul
+     * @param $step
+     * @return $this|Mock
+     */
+    public function ifStep($step)
+    {
+        $this->oldStep = $step;
+        return $this;
+    }
+
+    public function equal($value)
+    {
+        if($value == $this->get("step-{$this->oldStep}")) {
+            return $this;
+        }
+        return new Mock;
+    }
+    
     /**
      * If step is equal to current step return object
      * else return new Mock object.
