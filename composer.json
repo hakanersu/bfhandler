@@ -13,7 +13,7 @@
     "require": {
         "php": ">=5.5.0",
         "phpFastCache/phpFastCache": "^4.3",
-        "xuma/bfxm": "dev-master"
+        "xuma/bfxm": "1.0"
     },
     "autoload": {
         "psr-0": {
