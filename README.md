@@ -82,3 +82,9 @@ $handler->step(3)->execute(function($response) use($handler,$db){
 ```
 
 
+## TODO
+
+* Bfxm fonksiyonlarinin geri kalanlari eklenmeli.
+  * set_caller
+  * say
+  * dial
