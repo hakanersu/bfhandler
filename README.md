@@ -12,6 +12,9 @@ include '../vendor/autoload.php';
 use Xuma\Bfxm\Builder;
 use Xuma\Bfhandler\Handler;
 
+// Lutfen storage yolunu web uzerinden erisilemeyecek bir dizinde tutunuz.
+// hernekadar .htaccess ile korunuyor olsada etkinlestirilmemis sistemlerde
+// veya nginx'de sikinti yasamaniza yol acabilir.
 $config = [
     'storage'=>'files',
     'path'=> '/home/xuma/Desktop/bfbuilder/storage',
