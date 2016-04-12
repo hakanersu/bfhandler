@@ -84,6 +84,75 @@ $handler->step(3)->execute(function($response) use($handler,$db){
 })->playIfFails('error')->play('tesekkurler');
 ```
 
+Sql sorgularinin oldugu bir yapi hosunuza gitmiyorsa biraz daha soyutlayabilirsiniz.
+
+```php
+<?php
+class User
+{
+    protected $db;
+
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
+
+    public function getUser($customerId)
+    {
+        $user = $this->db->prepare('SELECT * FROM users WHERE id=:id');
+
+        $user->execute([
+            'id'=> $customerId
+        ]);
+
+        $result = $user->fetch(PDO::FETCH_OBJ);
+
+        if(!$result->id) {
+            return false;
+        }
+
+        return $result->id;
+    }
+
+    public function checkUserPassword($id,$response)
+    {
+        $user = $this->db->prepare('SELECT * FROM phonepasswords WHERE user_id=:id and password=:password');
+
+        $user->execute([
+            'id'        => $id,
+            'password'  => $response
+        ]);
+
+        $result = $user->fetch(PDO::FETCH_OBJ);
+
+        if(!$result->value) {
+            return false;
+        }
+
+        return true;
+    }
+
+}
+```
+
+```php
+$handler = new Handler(new Builder,$config);
+
+$db = new PDO('mysql:host=localhost;dbname=veritabanim;charset=utf8', 'kullanicim', 'sifrem');
+
+$customer = new User($db);
+
+$handler->step(1)->gather('kullanici-id');
+
+$handler->step(2)->execute(function($response) use($customer) {
+    return $customer->getUser() ?: false;
+})->playIfFails('error')->persist('customerNumber')->gather('kullanici-sifre');
+
+$handler->step(3)->execute(function($response) use($handler,$customer){
+    return $customer->checkUserPassword($handler->get('customerNumber'),$response);
+})->playIfFails('error')->play('tesekkurler');
+```
+
 
 ## TODO
 
