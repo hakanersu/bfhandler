@@ -106,7 +106,7 @@ class Handler{
     public function gatherIfFails($ask,$error = false,$min=3,$max=10,$attempt=3)
     {
         if(!$this->response) {
-            $this->gather($ask,$error = false,$min=3,$max=10,$attempt=3);
+            $this->gather($ask,$error,$min,$max,$attempt);
         }
         return $this;
     }
