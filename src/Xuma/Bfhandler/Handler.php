@@ -95,6 +95,23 @@ class Handler{
     }
 
     /**
+     * Gather if execute function fails.
+     * @param $ask
+     * @param bool $error
+     * @param int $min
+     * @param int $max
+     * @param int $attempt
+     * @return $this
+     */
+    public function gatherIfFails($ask,$error = false,$min=3,$max=10,$attempt=3)
+    {
+        if(!$this->response) {
+            $this->gather($ask,$error = false,$min=3,$max=10,$attempt=3);
+        }
+        return $this;
+    }
+
+    /**
      * Persist given value with cache file.
      *
      * @param $name
@@ -145,7 +162,6 @@ class Handler{
     {
         if(!$this->response) {
             $this->play($name);
-            return $this;
         }
         return $this;
     }
