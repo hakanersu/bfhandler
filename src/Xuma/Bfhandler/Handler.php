@@ -178,6 +178,32 @@ class Handler{
         return $this;
     }
 
+    /**
+     * Dial given number.
+     * @param $number
+     */
+    public function dial($number)
+    {
+        $this->builder->dial($number)->build(true);
+    }
+
+    /**
+     * Hangup call.
+     */
+    public function hangup()
+    {
+        $this->builder->hangup()->build(true);
+    }
+
+    /**
+     * Set caller for current call.
+     * @param $name
+     */
+    public function setCaller($name)
+    {
+        $this->builder->set_caller($name)->build(true);
+    }
+
     protected function getSoundFile($name)
     {
         if(array_key_exists($name,$this->config['soundFiles'])) {
