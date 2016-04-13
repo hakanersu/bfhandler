@@ -155,19 +155,54 @@ $handler->step(3)->execute(function($response) use($handler,$customer){
 
 ### Karmasik Menu Ornegi
 ```php
-$handler = new Handler(new Builder,$config);
+$handler->step(1)->gather('karsilama');
 
-$handler->step(1)->gather('hosgeldiniz');
 // Step 2
-$handler->step(2)->ifInput(1)->gather('musteri-numaranizi-giriniz');
-$handler->step(2)->ifInput(2)->gather('musteri-degilseniz');
-$handler->step(2)->ifInput(3)->play('hukiki-islemler');
-$handler->step(2)->ifInput(9)->play('ingilizece-menu');
+$handler->step(2)->input(1)->gather('musteri-numarasi');
+$handler->step(2)->input(2)->gather('ziyaretci');
+$handler->step(2)->input(3)->execute(function($response){ return $response; })->persist('hukiki')->play('kaydedilecek');
+$handler->step(2)->input(9)->execute(function($response){ return $response; })->persist('ingilizce')->play('kaydedilecek');
+
+
 // Step 3
-$handler->step(3)->ifStep(1)->equal(1)->execute(function($response){ })->persist()->gather('asdfasdf');
-$handler->step(3)->ifStep(1)->equal(2)->dial(2);
-$handler->step(3)->ifStep(1)->equal(3)->dial(3);
-$handler->step(3)->ifStep(1)->equal(9)->dial(10);
+$handler->step(3)->ifStep(1)->equal(1)->execute(function($response) use($client){
+    return $client->client($response) ?: false;
+})->playIfFails('hatali-giris')
+  ->persist('customerNumber')
+  ->gather('musteri-pin');
+
+$handler->step(3)->ifStep(1)->equal(2)->execute(function($response) {
+    if($response == 1) return 12;
+    if($response == 2) return 13;
+    if($response == 3) return 14;
+    return false;
+})->playIfFails('hatali-giris')
+  ->persist('musteri-menu')
+  ->play('kaydedilecek');
+$handler->step(3)->ifStep(1)->equal(3)->dial($handler->get('hukiki'));
+$handler->step(3)->ifStep(1)->equal(9)->dial($handler->get('ingilizce'));
+
+// Step 4.
+$handler->step(4)->ifStep(1)->equal(1)->execute(function($response) use($handler,$client){
+    return $client->password($handler->get('customerNumber'),$response);
+})->playIfFails('hatali-giris')
+  ->gather('giris-yapmis');
+
+$handler->step(4)->ifStep(1)->equal(2)->dial($handler->get('musteri-menu'));
+
+
+// Step 5
+$handler->step(5)->execute(function($response) {
+    if($response == 1) return 13;
+    if($response == 2) return 14;
+    if($response == 2) return 15;
+    return false;
+})->playIfFails('hatali-giris')
+  ->persist('hedef')
+  ->play('kaydedilecek');
+
+// Step 6
+$handler->step(6)->dial($handler->get('hedef'));
 ```
 
 ## TODO
