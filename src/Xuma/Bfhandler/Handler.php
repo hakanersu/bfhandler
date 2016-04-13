@@ -13,7 +13,7 @@ class Handler{
 
     protected $builder;
 
-    protected $response;
+    public $response;
 
     protected $oldStep = false;
 
@@ -51,7 +51,7 @@ class Handler{
      * @param $input
      * @return $this|Mock
      */
-    public function ifInput($input)
+    public function input($input)
     {
         if($input==$this->get("response")) {
             return $this;
@@ -77,7 +77,7 @@ class Handler{
         }
         return new Mock;
     }
-    
+
     /**
      * If step is equal to current step return object
      * else return new Mock object.
@@ -117,8 +117,9 @@ class Handler{
      * @param int $attempt
      * @return $this
      */
-    public function gather($ask,$error = false,$min=3,$max=10,$attempt=3)
+    public function gather($ask,$error = false,$min=1,$max=10,$attempt=3)
     {
+
         $this->builder->gather([
             'min_digits'    => $min,
             'max_digits'    => $max,

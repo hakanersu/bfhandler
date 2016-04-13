@@ -12,11 +12,10 @@ class Mock {
     public function gatherIfFails($name){ return $this; }
     public function play($name)         { return $this; }
     public function ifStep($step)       { return $this; }
-    public function ifInput($input)     { return $this; }
+    public function input($input)     { return $this; }
     public function dial($number)       { return $this; }
     public function setCaller($name)    { return $this; }
     public function hangup()            { return $this; }
     public function equal($value)       { return $this; }
     public function getSoundFile($name) { return $this; }
-
 }
